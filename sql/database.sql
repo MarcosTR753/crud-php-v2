@@ -5,6 +5,13 @@ CREATE TABLE cars (
   color VARCHAR(100) NOT NULL,
   refmotor VARCHAR(100) NOT NULL,
   matricula VARCHAR(10) NOT NULL
+  CONSTRAINT FK_marca FOREIGN KEY (marca) REFERENCES marcas(nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE marcas (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  matriz VARCHAR(100) NOT NULL,
+  pais VARCHAR(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO cars (marca, modelo, color, refmotor,matricula) VALUES('Seat','Marbella','Rojo','AJN','S1234AA');
