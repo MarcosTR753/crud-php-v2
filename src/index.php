@@ -9,7 +9,7 @@ DB_PASSWORD: Contraseña del usuario e la BD
 include_once("config.php");
 
 //Consulta de selección. Selecciona todos los usuarios ordenados de manera descendente por el campo id
-$result = mysqli_query($mysqli, "SELECT * FROM cars ORDER BY id DESC");
+$result = mysqli_query($mysqli, "SELECT marcas.nombre marca, marcas.modelo modelo, cars.color color, cars.refmotor refmotor, cars.matricula matricula FROM marcas INNER JOIN cars ON marcas.id=cars.idmarca WHERE cars.idmarca=marcas.id");
 
 ?>
 
