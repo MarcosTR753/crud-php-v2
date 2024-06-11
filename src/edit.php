@@ -8,19 +8,14 @@ Transacción de datos utilizando el método: POST
 */
 if(isset($_POST['modifica'])) {
 	$id = mysqli_real_escape_string($mysqli, $_POST['id']);
-	$marca = mysqli_real_escape_string($mysqli, $_POST['marca']);
-	$modelo = mysqli_real_escape_string($mysqli, $_POST['modelo']);
+	$idmarca = mysqli_real_escape_string($mysqli, $_POST['marca']);
 	$color = mysqli_real_escape_string($mysqli, $_POST['color']);
 	$refmotor = mysqli_real_escape_string($mysqli, $_POST['refmotor']);
 	$matricula = mysqli_real_escape_string($mysqli, $_POST['matricula']);
 
-	if(empty($marca) || empty($modelo) || empty($color) || empty($refmotor) || empty($matricula))	{
-		if(empty($marca)) {
+	if(empty($idmarca) || empty($color) || empty($refmotor) || empty($matricula))	{
+		if(empty($idmarca)) {
 			echo "<font color='red'>Campo marca vacío.</font><br/>";
-		}
-
-		if(empty($modelo)) {
-			echo "<font color='red'>Campo modelo vacío.</font><br/>";
 		}
 
 		if(empty($color)) {
@@ -38,13 +33,13 @@ if(isset($_POST['modifica'])) {
 	else 
 	{
 //Prepara una sentencia SQL para su ejecución. En este caso una modificación de un registro de la BD.				
-		$stmt = mysqli_prepare($mysqli, "UPDATE cars SET marca=?,modelo=?,color=?,refmotor=?,matricula=? WHERE id=?");
+		$stmt = mysqli_prepare($mysqli, "UPDATE cars SET idmarca=?,color=?,refmotor=?,matricula=? WHERE id=?");
 /*Enlaza variables como parámetros a una setencia preparada. 
 i: La variable correspondiente tiene tipo entero
 d: La variable correspondiente tiene tipo doble
 s:	La variable correspondiente tiene tipo cadena
 */				
-		mysqli_stmt_bind_param($stmt, "sssssi", $marca, $modelo, $color, $refmotor, $matricula, $id);
+		mysqli_stmt_bind_param($stmt, "isssi", $idmarca, $color, $refmotor, $matricula, $id);
 //Ejecuta una consulta preparada			
 		mysqli_stmt_execute($stmt);
 //Libera la memoria donde se almacenó el resultado
@@ -66,13 +61,13 @@ $id = mysqli_real_escape_string($mysqli, $id);
 
 
 //Prepara una sentencia SQL para su ejecución. En este caso selecciona el registro a modificar y lo muestra en el formulario.				
-$stmt = mysqli_prepare($mysqli, "SELECT marca, modelo, color, refmotor, matricula FROM cars WHERE id=?");
+$stmt = mysqli_prepare($mysqli, "SELECT idmarca, color, refmotor, matricula FROM cars WHERE id=?");
 //Enlaza variables como parámetros a una setencia preparada. 
 mysqli_stmt_bind_param($stmt, "i", $id);
 //Ejecuta una consulta preparada
 mysqli_stmt_execute($stmt);
 //Enlaza variables a una setencia preparada para el almacenamiento del resultado
-mysqli_stmt_bind_result($stmt, $marca, $modelo, $color, $refmotor, $matricula);
+mysqli_stmt_bind_result($stmt, $idmarca, $color, $refmotor, $matricula);
 //Obtiene el resultado de una sentencia SQL preparada en las variables enlazadas
 mysqli_stmt_fetch($stmt);
 //Libera la memoria donde se almacenó el resultado		
@@ -80,7 +75,7 @@ mysqli_stmt_free_result($stmt);
 //Cierra la sentencia preparada
 mysqli_stmt_close($stmt);
 //Cierra la conexión de base de datos previamente abierta
-mysqli_close($mysqli);
+//mysqli_close($mysqli);
 ?>
 
 <!DOCTYPE html>
@@ -106,7 +101,7 @@ mysqli_close($mysqli);
 	<main>				
 	<ul>
 		<li><a href="index.php" >Inicio</a></li>
-		<li><a href="add.html" >Alta</a></li>
+		<li><a href="add.php" >Alta</a></li>
 	</ul>
 	<h2>Modificación Coches</h2>
 <!--Formulario de edición. 
@@ -114,12 +109,21 @@ Al hacer click en el botón Guardar, llama a esta misma página: edit.php-->
 	<form action="edit.php" method="post">
 		<div>
 			<label for="marca">Marca</label>
-			<input type="text" name="marca" id="marca" value="<?php echo $marca;?>" required>
-		</div>
+			<!--<input type="text" name="marca" id="marca" placeholder="marca" required>-->
+			<?php
+			$result = mysqli_query($mysqli, "SELECT id, nombre marca, modelo FROM marcas");
+			?>
 
-		<div>
-			<label for="modelo">Modelo</label>
-			<input type="text" name="modelo" id="modelo" value="<?php echo $modelo;?>" required>
+			<select name="marca">
+			<?php	
+			while($res = mysqli_fetch_array($result)) {
+			if ($res['id']==$idmarca)
+			echo "<option selected value=".$res['id'].">".$res['marca']." ".$res['modelo']."</option>";
+			else
+			echo "<option value=".$res['id'].">".$res['marca']." ".$res['modelo']."</option>";
+			}
+			?>
+			</select>
 		</div>
 
 		<div>
