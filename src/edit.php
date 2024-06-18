@@ -101,8 +101,8 @@ mysqli_stmt_close($stmt);
 	
 	<main>				
 	<ul>
-		<li><a href="index.php" >Inicio</a></li>
-		<li><a href="add.php" >Alta</a></li>
+	<li><a href="index.php"><button class="btn btn-primary btn-lg" border="1">Inicio</button></a></li>
+		<li><a href="add.php"><button class="btn btn-primary btn-lg">Alta</button></a></li>
 	</ul>
 	<h2>Modificación Coches</h2>
 <!--Formulario de edición. 
